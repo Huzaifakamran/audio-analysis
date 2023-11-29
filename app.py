@@ -28,7 +28,7 @@ def delete_all_files_in_directory(directory_path):
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
-        st.write(f"All files in '{directory_path}' deleted successfully.")
+        print(f"All files in '{directory_path}' deleted successfully.")
 
     except Exception as e:
         st.write(f"An error occurred: {e}")
