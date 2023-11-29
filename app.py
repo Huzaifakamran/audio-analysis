@@ -7,8 +7,8 @@ import os
 
 load_dotenv()
 
-# client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # def save_uploaded_audio(uploaded_file, save_path):
 #     audio_content = uploaded_file.getvalue()
