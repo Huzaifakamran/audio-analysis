@@ -15,8 +15,8 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 #     with open(save_path, "wb") as f:
 #         f.write(audio_content)
 
-def get_prober_name():
-    return "ffmpeg/bin/ffprobe.exe"
+# def get_prober_name():
+#     return "ffmpeg/bin/ffprobe.exe"
 
 def delete_all_files_in_directory(directory_path):
     try:
@@ -135,7 +135,7 @@ def main():
                 #     print(result)
                 #     st.write(result)
     except Exception as e:
-        print(e)         
+        st.write(e)         
 
                 
 if __name__ == "__main__":
