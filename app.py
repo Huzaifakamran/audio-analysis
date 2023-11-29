@@ -34,8 +34,8 @@ def delete_all_files_in_directory(directory_path):
         st.write(f"An error occurred: {e}")
 
 def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
-    st.write('inside fun')
-    st.write(input_path.size)
+    print('inside fun')
+    print(input_path.size)
     # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
     # utils.get_prober_name = get_prober_name
     audio = AudioSegment.from_file(input_path)
@@ -44,16 +44,16 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
     
      # Check file size
     file_size_mb = os.path.getsize(output_path) / (1024 * 1024)  # Size in MB
-    st.write(file_size_mb)
+    print(file_size_mb)
     if file_size_mb <= max_size_mb:
-        st.write('under if')
+        print('under if')
         parts = [output_path]  # Return a list with the path of the converted .wav file
 
     else:
-        st.write('under else')
+        print('under else')
         parts = []
         segment_size_ms = 100000  # Adjust this value based on your needs (10 seconds in this example)
-        st.write(len(audio))
+        print(len(audio))
         for start in range(0, len(audio), segment_size_ms):
             end = start + segment_size_ms
             part = audio[start:end]
@@ -61,11 +61,11 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
             part.export(part_path, format="wav")
             parts.append(part_path)
 
-    st.write('PARTS: ',len(parts))
-    st.write('PARTS: ',parts)
+    print('PARTS: ',len(parts))
+    print('PARTS: ',parts)
     text = ""
     for i in parts:
-        st.write(i)
+        print(i)
         audio_file = open(i, "rb")
         transcript = client.audio.transcriptions.create(
         model="whisper-1",
