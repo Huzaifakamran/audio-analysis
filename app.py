@@ -15,8 +15,8 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 #     with open(save_path, "wb") as f:
 #         f.write(audio_content)
 
-# def get_prober_name():
-#     return "ffmpeg/bin/ffprobe.exe"
+def get_prober_name():
+    return "ffmpeg/bin/ffprobe.exe"
 
 def delete_all_files_in_directory(directory_path):
     try:
@@ -28,14 +28,14 @@ def delete_all_files_in_directory(directory_path):
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
-        print(f"All files in '{directory_path}' deleted successfully.")
+        st.write(f"All files in '{directory_path}' deleted successfully.")
 
     except Exception as e:
-        print(f"An error occurred: {e}")
+        st.write(f"An error occurred: {e}")
 
 def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
-    print('inside fun')
-    print(input_path.size)
+    st.write('inside fun')
+    st.write(input_path.size)
     # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
     # utils.get_prober_name = get_prober_name
     audio = AudioSegment.from_file(input_path)
@@ -44,16 +44,16 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
     
      # Check file size
     file_size_mb = os.path.getsize(output_path) / (1024 * 1024)  # Size in MB
-    print(file_size_mb)
+    st.write(file_size_mb)
     if file_size_mb <= max_size_mb:
-        print('under if')
+        st.write('under if')
         parts = [output_path]  # Return a list with the path of the converted .wav file
 
     else:
-        print('under else')
+        st.write('under else')
         parts = []
         segment_size_ms = 100000  # Adjust this value based on your needs (10 seconds in this example)
-        print(len(audio))
+        st.write(len(audio))
         for start in range(0, len(audio), segment_size_ms):
             end = start + segment_size_ms
             part = audio[start:end]
@@ -61,11 +61,11 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
             part.export(part_path, format="wav")
             parts.append(part_path)
 
-    print('PARTS: ',len(parts))
-    print('PARTS: ',parts)
+    st.write('PARTS: ',len(parts))
+    st.write('PARTS: ',parts)
     text = ""
     for i in parts:
-        print(i)
+        st.write(i)
         audio_file = open(i, "rb")
         transcript = client.audio.transcriptions.create(
         model="whisper-1",
@@ -104,6 +104,8 @@ def main():
                     
                     with duration:
                         st.write("In Progress...")
+                    
+                    delete_all_files_in_directory('audios')
                 # with concepts:
                 #     assistant = client.completions.create(
                 #     model="gpt-3.5-turbo-instruct",
