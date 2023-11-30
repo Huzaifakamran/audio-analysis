@@ -27,7 +27,7 @@ def delete_all_files_in_directory(directory_path):
             # Check if it is a file (not a directory) and delete it
             if os.path.isfile(file_path):
                 os.remove(file_path)
-        st.toast(f"All files in '{directory_path}' deleted successfully.", icon='😍')
+        st.toast(f"All stored files deleted successfully.", icon='😍')
 
     except Exception as e:
         st.write(f"An error occurred: {e}")
@@ -95,7 +95,7 @@ def main():
                 # converted_files  = convert_audio_to_text(st.session_state.audio_file,'audios')
                 # print("Converted and/or split files:", converted_files)
                 # Add tabs
-                text,duration = st.tabs(["Audio To Text","Duration"])
+                text,duration,details = st.tabs(["Audio To Text","Duration","Detail"])
         
                 with text:
                     # for utterance in transcript.utterances:
@@ -104,39 +104,37 @@ def main():
                 
                 with duration:
                     st.write("In Progress...")
+                with st.spinner('analysing the conversation to fetch the required details'):    
+                    with details:
+                        assistant = client.chat.completions.create(
+                        model="gpt-4-1106-preview",
+                        messages=[
+                            {"role": "system", "content":'''You need to give 3 details by checking the below text extracted 
+                        from an audio in spanish and in the audio there will be 2 people one is client
+                        and the other one is salesman. 
+                        The first detail is "Concept", you need to understand the concept spoken in the audio.
+                        For example customer talk about buying a car and talk about speed, 
+                        engine, seat, security, etc so you need to understand the converation and 
+                        which part is said by who (client & salesman). 
+                        The second detail is "Client Profile", you need to identify the client profile based on
+                        the following preferences of purchasing: (Trend,Money,Confort, Fidelity,Security and Pride). 
+                        And the last detail is to called "Probablity", you need to analyze the conversation based on client profile 
+                        and establish a probability of purchasing from 0 to 1.
+
+                        In the output each detail should be in the new line like this:
+                        Concept:
+                        Client Profile:
+                        Probablity:
+                        
+                        Note: Make sure answer will be in spanish'''},
+                        {"role": "user", "content":TranscriptText}]
+                        )
+                        result = assistant.choices[0].message.content
+                        st.write(result)
 
                 delete_all_files_in_directory('audios')
-                # with concepts:
-                #     assistant = client.completions.create(
-                #     model="gpt-3.5-turbo-instruct",
-                #     prompt=f'''You need to give 3 details by checking the below text extracted 
-                #     from an audio in spanish and in each audio mostly there will be 2 people one is client
-                #     and the other one is salesman. 
-                #     The first detail is "Concept", you need to understand the concept spoken in the audio.
-                #     For example customer talk about buying a car and talk about speed, 
-                #     engine, seat, security, etc so you need to understand the converation and 
-                #     which part is said by who (client & salesman). 
-                #     The second detail is "Client Profile", you need to identify the client profile based on
-                #     the following preferences of purchasing: [Trend,Money,Confort, Fidelity,Security and Pride]. 
-                #     And the last detail is to called "Probablity", you need to analyze the conversation based on client profile 
-                #     and establish a probability of purchasing from 0 to 1.
-
-                #     In the output each detail should be in the new line like this:
-                #     Concept:
-                #     Client Profile:
-                #     Probablity:
-
-                #     Please find the audio text below:\n
-                #     {transcript.text}''',
-                #     max_tokens=1500,
-                #     temperature=0
-                #     )
-                #     result = assistant.choices[0].text
-                #     print(result)
-                #     st.write(result)
     except Exception as e:
         st.write(e)         
-
                 
 if __name__ == "__main__":
     main()
