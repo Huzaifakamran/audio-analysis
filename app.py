@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 import subprocess
 import math
+import ffmpeg
 
 load_dotenv()
 
@@ -37,11 +38,10 @@ def delete_all_files_in_directory(directory_path):
 def detect_silence(path, time):
     print('inside')
     # Full path to the ffmpeg executable
-    # ffmpeg_path = 'ffmpeg'  # Replace this with the actual path on your system
+    # ffmpeg_path = r'ffmpeg\bin\ffmpeg.exe'  # Replace this with the actual path on your system
 
     # Use os.path.join to create the full command
-    command = f'{path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
-    # command = f'{path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
+    command = f'ffmpeg -i {path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
     
     out = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, stderr = out.communicate()
