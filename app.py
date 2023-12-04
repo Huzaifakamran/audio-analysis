@@ -37,10 +37,10 @@ def delete_all_files_in_directory(directory_path):
 def detect_silence(path, time):
     print('inside')
     # Full path to the ffmpeg executable
-    ffmpeg_path = 'ffmpeg'  # Replace this with the actual path on your system
+    # ffmpeg_path = 'ffmpeg'  # Replace this with the actual path on your system
 
     # Use os.path.join to create the full command
-    command = f'{ffmpeg_path} -i {path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
+    command = f'{path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
     # command = f'{path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
     
     out = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
