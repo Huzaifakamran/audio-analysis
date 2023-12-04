@@ -36,44 +36,44 @@ def delete_all_files_in_directory(directory_path):
     except Exception as e:
         st.write(f"An error occurred: {e}")
 
-# def detect_silence(path, time):
-#     print('inside')
-#     # Full path to the ffmpeg executable
-#     ffmpeg_path = '/usr/bin/ffmpeg'  # Replace this with the actual path on your system
+def detect_silence(path, time):
+    print('inside')
+    # Full path to the ffmpeg executable
+    ffmpeg_path = 'usr/bin/ffmpeg'  # Replace this with the actual path on your system
 
-#     # Use os.path.join to create the full command
-#     command = f'{ffmpeg_path} -i {path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
+    # Use os.path.join to create the full command
+    command = f'{ffmpeg_path} -i {path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
     
-#     out = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#     stdout, stderr = out.communicate()
-#     s = stdout.decode("utf-8")
-#     k = s.split('[silencedetect @')
+    out = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    stdout, stderr = out.communicate()
+    s = stdout.decode("utf-8")
+    k = s.split('[silencedetect @')
     
-#     if len(k) == 1:
-#         # print(stderr)
-#         return None
+    if len(k) == 1:
+        # print(stderr)
+        return None
 
-#     start, end = [], []
-#     for i in range(1, len(k)):
-#         x = k[i].split(']')[1]
-#         if i % 2 == 0:
-#             x = x.split('|')[0]
-#             x = x.split(':')[1].strip()
-#             # print(x)
-#             end.append(float(x))
-#         else:
-#             x = x.split(':')[1]
-#             x = x.split('size')[0]
-#             x = x.replace('\r', '')
-#             x = x.replace('\n', '').strip()
+    start, end = [], []
+    for i in range(1, len(k)):
+        x = k[i].split(']')[1]
+        if i % 2 == 0:
+            x = x.split('|')[0]
+            x = x.split(':')[1].strip()
+            # print(x)
+            end.append(float(x))
+        else:
+            x = x.split(':')[1]
+            x = x.split('size')[0]
+            x = x.replace('\r', '')
+            x = x.replace('\n', '').strip()
             
-#             try:
-#                 start.append(float(x))
-#             except ValueError as e:
-#                 x=x.split('[')[0]
-#                 start.append(float(x))
-#     # print(list(zip(start, end)))
-#     return list(zip(start, end))
+            try:
+                start.append(float(x))
+            except ValueError as e:
+                x=x.split('[')[0]
+                start.append(float(x))
+    # print(list(zip(start, end)))
+    return list(zip(start, end))
 
 def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
@@ -149,25 +149,25 @@ def main():
                     st.write(TranscriptText)
                 
                 with duration:
-                    # st.write("PATH:", os.environ["PATH"])
+                    st.write("PATH:", os.environ["PATH"])
                     
-                    # ffmpeg_path = shutil.which("ffmpeg")
-                    # st.write("ffmpeg path:", ffmpeg_path)
+                    ffmpeg_path = shutil.which("ffmpeg")
+                    st.write("ffmpeg path:", ffmpeg_path)
                     st.write("Current Working Directory:", os.getcwd())
-                    # silence_list = detect_silence(output_path, time = 4)
-                    # start,end = silence_list[0]
-                    # start1,end1 = silence_list[-1]
-                    # audio_start = math.floor(end)
-                    # audio_end = round(end1 / 60, 1)
+                    silence_list = detect_silence(output_path, time = 4)
+                    start,end = silence_list[0]
+                    start1,end1 = silence_list[-1]
+                    audio_start = math.floor(end)
+                    audio_end = round(end1 / 60, 1)
 
-                    # audio_duration = audio_length - round(audio_start / 60, 1)
+                    audio_duration = audio_length - round(audio_start / 60, 1)
 
-                    # st.write('Audio Details:')
-                    # st.write(f"Start: {audio_start}sec")
-                    # st.write(f"End: {audio_end}min(s)")
-                    # st.write(f"Audio Duration: {audio_duration}min(s)")
+                    st.write('Audio Details:')
+                    st.write(f"Start: {audio_start}sec")
+                    st.write(f"End: {audio_end}min(s)")
+                    st.write(f"Audio Duration: {audio_duration}min(s)")
                 
-                    st.write('In progress')
+                    # st.write('In progress')
                 with st.spinner('analysing the conversation to fetch the required details'):    
                     with details:
                         assistant = client.chat.completions.create(
