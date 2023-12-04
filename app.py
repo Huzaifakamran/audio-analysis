@@ -7,6 +7,7 @@ import os
 import subprocess
 import math
 import ffmpeg
+import shutil
 
 load_dotenv()
 
@@ -148,7 +149,11 @@ def main():
                     st.write(TranscriptText)
                 
                 with duration:
+                    st.write("PATH:", os.environ["PATH"])
                     
+                    ffmpeg_path = shutil.which("ffmpeg")
+                    st.write("ffmpeg path:", ffmpeg_path)
+
                     # silence_list = detect_silence(output_path, time = 4)
                     # start,end = silence_list[0]
                     # start1,end1 = silence_list[-1]
