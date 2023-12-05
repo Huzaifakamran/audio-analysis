@@ -187,7 +187,7 @@ def main():
                         model="gpt-4-1106-preview",
                         temperature=0,
                         messages=[
-                            {"role": "system", "content":'''You need to give 5 details by checking the below text extracted 
+                            {"role": "system", "content":'''You need to give 4 details by checking the below text extracted 
                         from an audio in spanish and in the audio there will be 2 people one is client
                         and the other one is salesman. 
                              
@@ -195,22 +195,18 @@ def main():
                         For example customer talk about buying a car and talk about speed, 
                         engine, seat, security, etc so you need to understand the converation and 
                         which part is said by who (client & salesman). 
-                        
-                        The second details is "Nouns", you need to extract nouns spoken over conversation 
-                        (and number of times it appears) and differates them between client and salesman.
                              
-                        The third detail is "Client Profile", you need to identify the client profile based on
+                        The second detail is "Client Profile", you need to identify the client profile based on
                         the following preferences of purchasing: (Trend,Money,Confort, Fidelity,Security and Pride). 
                         
-                        The fourth detail is "Distribution",you need to include a percentage distribution of the 
+                        The third detail is "Distribution",you need to include a percentage distribution of the 
                         6 preferences of client profile for purchaising. And 'Pride' and 'Status' is same thing so use one of them.
                              
-                        And the fifth detail is to called "Probablity", you need to analyze the conversation based on client profile 
+                        And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
                         and establish a probability of purchasing from 0 to 1.
 
                         In the output each detail should be in the new line like this:
                         Concept:
-                        Nouns:
                         Client Profile:
                         Distribution:
                         Probablity:
