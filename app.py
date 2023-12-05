@@ -8,19 +8,37 @@ import subprocess
 import math
 import ffmpeg
 import shutil
+import spacy
+from collections import Counter
+
 
 load_dotenv()
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# def save_uploaded_audio(uploaded_file, save_path):
-#     audio_content = uploaded_file.getvalue()
-#     with open(save_path, "wb") as f:
-#         f.write(audio_content)
-
 # def get_prober_name():
 #     return "ffmpeg/bin/ffprobe.exe"
+
+def extract_nouns_with_counts(TranscriptText):
+    nlp = spacy.load('es_core_news_sm')
+    spanish_verbs = ['hablar', 'comer', 'vivir', 'trabajar', 'pensar', 'ser', 'estar', 'tener', 'poder', 'hacer', 'decir', 'ir', 'venir', 'saber', 'querer', 'dar', 'ver', 'sentir', 'oír', 'conocer', 'poner', 'salir', 'traer', 'caber', 'valer', 'conseguir', 'poder', 'poner', 'andar', 'caminar', 'correr', 'saltar', 'nadar', 'bailar', 'cantar', 'tocar', 'escribir', 'leer', 'estudiar', 'aprender', 'enseñar', 'viajar', 'conducir', 'pintar', 'cocinar']
+    
+    def extract_nouns(text):
+        doc = nlp(text)
+        nouns = [token.lemma_ for token in doc if token.pos_ == 'NOUN' and token.lemma_ not in [verb.lemma_ for verb in doc if verb.pos_ == 'VERB'] and token.lemma_ not in spanish_verbs]
+        return nouns
+
+    def count_occurrences(nouns):
+        noun_counts = Counter(nouns)
+        return noun_counts
+    
+    spanish_text = TranscriptText.lower()
+    nouns = extract_nouns(spanish_text)
+    noun_occurrences = count_occurrences(nouns)
+    return noun_occurrences
+    
+
 
 def delete_all_files_in_directory(directory_path):
     try:
@@ -77,8 +95,6 @@ def delete_all_files_in_directory(directory_path):
 
 def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
-        # print('inside fun')
-        # print(input_path.size)
         # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
         # utils.get_prober_name = get_prober_name
         audio = AudioSegment.from_file(input_path)
@@ -86,13 +102,9 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
         audio.export(output_path, format="wav")
     
     with st.spinner('splitting audio'):
-        # Check file size
-        file_size_mb = os.path.getsize(output_path) / (1024 * 1024)  # Size in MB
-        # print(file_size_mb)
-        
+        file_size_mb = os.path.getsize(output_path) / (1024 * 1024)  # Size in MB       
         if file_size_mb <= max_size_mb:
-            # print('under if')
-            parts = [output_path]  # Return a list with the path of the converted .wav file
+            parts = [output_path]  
 
         else:
             # print('under else')
@@ -105,10 +117,7 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
                 part_path = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(input_path.name))[0]}_{start}-{end}.wav")
                 part.export(part_path, format="wav")
                 parts.append(part_path)
-               
-
-    # print('PARTS: ',len(parts))
-    # print('PARTS: ',parts)
+  
     audio_duration = round(len(audio) / 60000, 1)
     with st.spinner(f'extracting text from {len(parts)} audio files'):
         text = ""
@@ -126,12 +135,10 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
 def main():
     try:
         st.title("Audio to Text Conversion App")
-
         if "audio_file" not in st.session_state:
             st.session_state.audio_file = None
 
         uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav"])
-
         if uploaded_file is not None:
             st.session_state.audio_file = uploaded_file
             st.audio(st.session_state.audio_file, format="audio/wav", start_time=0)
@@ -141,7 +148,7 @@ def main():
                 # converted_files  = convert_audio_to_text(st.session_state.audio_file,'audios')
                 # print("Converted and/or split files:", converted_files)
                 # Add tabs
-                text,duration,details = st.tabs(["Audio To Text","Duration","Detail"])
+                text,duration,nouns,details = st.tabs(["Audio To Text","Duration","Nouns","Detail"])
         
                 with text:
                     # for utterance in transcript.utterances:
@@ -168,10 +175,17 @@ def main():
                     # st.write(f"Audio Duration: {audio_duration}min(s)")
                 
                     st.write('In progress')
+                with st.spinner('Extracting Nouns'):    
+                    with nouns:
+                        noun_occurrences = extract_nouns_with_counts(TranscriptText)
+                        for noun, count in noun_occurrences.items():
+                            st.write(f"Noun: {noun}, Occurrences: {count}")
+
                 with st.spinner('analysing the conversation to fetch the required details'):    
                     with details:
                         assistant = client.chat.completions.create(
                         model="gpt-4-1106-preview",
+                        temperature=0,
                         messages=[
                             {"role": "system", "content":'''You need to give 5 details by checking the below text extracted 
                         from an audio in spanish and in the audio there will be 2 people one is client
