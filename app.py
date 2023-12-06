@@ -22,7 +22,7 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def extract_nouns_with_counts(TranscriptText):
     nlp = spacy.load('es_core_news_sm')
-    spanish_verbs = ['hablar', 'comer','sea', 'es', 'tardaría' ,'vivir', 'trabajar', 'pensar', 'ser', 'estar', 'tener', 'poder', 'hacer', 'decir', 'ir', 'venir', 'saber', 'querer', 'dar', 'ver', 'sentir', 'oír', 'conocer', 'poner', 'salir', 'traer', 'caber', 'valer', 'conseguir', 'poder', 'poner', 'andar', 'caminar', 'correr', 'saltar', 'nadar', 'bailar', 'cantar', 'tocar', 'escribir', 'leer', 'estudiar', 'aprender', 'enseñar', 'viajar', 'conducir', 'pintar', 'cocinar']
+    spanish_verbs = ['hablar','cosa','hecho','gracia','gracias','solo','adiós','vale','respecto','poder','cuenta' ,'comer','sea', 'es', 'tardaría' ,'vivir', 'trabajar', 'pensar', 'ser', 'estar', 'tener', 'poder', 'hacer', 'decir', 'ir', 'venir', 'saber', 'querer', 'dar', 'ver', 'sentir', 'oír', 'conocer', 'poner', 'salir', 'traer', 'caber', 'valer', 'conseguir', 'poder', 'poner', 'andar', 'caminar', 'correr', 'saltar', 'nadar', 'bailar', 'cantar', 'tocar', 'escribir', 'leer', 'estudiar', 'aprender', 'enseñar', 'viajar', 'conducir', 'pintar', 'cocinar']
     
     def extract_nouns(text):
         doc = nlp(text)
