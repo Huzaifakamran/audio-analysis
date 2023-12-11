@@ -11,7 +11,6 @@ import shutil
 import spacy
 from collections import Counter
 
-
 load_dotenv()
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -22,7 +21,7 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def extract_nouns_with_counts(TranscriptText):
     nlp = spacy.load('es_core_news_sm')
-    spanish_verbs = ['hablar','cosa','hecho','gracia','gracias','solo','adiós','vale','respecto','poder','cuenta' ,'comer','sea', 'es', 'tardaría' ,'vivir', 'trabajar', 'pensar', 'ser', 'estar', 'tener', 'poder', 'hacer', 'decir', 'ir', 'venir', 'saber', 'querer', 'dar', 'ver', 'sentir', 'oír', 'conocer', 'poner', 'salir', 'traer', 'caber', 'valer', 'conseguir', 'poder', 'poner', 'andar', 'caminar', 'correr', 'saltar', 'nadar', 'bailar', 'cantar', 'tocar', 'escribir', 'leer', 'estudiar', 'aprender', 'enseñar', 'viajar', 'conducir', 'pintar', 'cocinar']
+    spanish_verbs = ['hablar','cosa','hecho','gracia','gracias','solo','adiós','vale','respecto','poder','cuenta' ,'comer','vivir', 'trabajar', 'pensar', 'ser', 'estar', 'tener', 'poder', 'hacer', 'decir', 'ir', 'venir', 'saber', 'querer', 'dar', 'ver', 'sentir', 'oír', 'conocer', 'poner', 'salir', 'traer', 'caber', 'valer', 'conseguir', 'poder', 'poner', 'andar', 'caminar', 'correr', 'saltar', 'nadar', 'bailar', 'cantar', 'tocar', 'escribir', 'leer', 'estudiar', 'aprender', 'enseñar', 'viajar', 'conducir', 'pintar', 'cocinar']
     
     def extract_nouns(text):
         doc = nlp(text)
@@ -38,8 +37,6 @@ def extract_nouns_with_counts(TranscriptText):
     noun_occurrences = count_occurrences(nouns)
     return noun_occurrences
     
-
-
 def delete_all_files_in_directory(directory_path):
     try:
         # Iterate over all files in the directory
@@ -126,6 +123,7 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
+            prompt="Opel Astra,Hyundai,Peugeot,Audi,Mercedes Benz,BMW",
             file=audio_file
             )
             text += transcript.text + " "
