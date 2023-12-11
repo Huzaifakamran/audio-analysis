@@ -123,7 +123,6 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt="Opel Astra,Hyundai,Peugeot,Audi,Mercedes Benz,BMW",
             file=audio_file
             )
             text += transcript.text + " "
