@@ -242,7 +242,8 @@ def main():
                         the following preferences of purchasing: (Trend,Money,Confort, Fidelity,Security and Pride). 
                         
                         The third detail is "Distribution",you need to include a percentage distribution of the 
-                        6 preferences of client profile for purchaising. And 'Pride' and 'Status' is same thing so use one of them.
+                        6 preferences of client profile for purchaising(Trend,Money,Confort, Fidelity,Security and Pride). 
+                        And 'Pride' and 'Status' is same thing so use one of them.
                              
                         And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
                         and establish a probability of purchasing from 0 to 1.
