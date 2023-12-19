@@ -222,7 +222,7 @@ def main():
                     start1,end1 = silence_list[-1]
                     audio_start = math.ceil(end)
                     # audio_end = round(end1 / 60, 1)
-                    st.write(audio_length)
+                    # st.write(audio_length)
                     end_minutes, end_seconds = divmod(end1, 60)
                     audio_duration = audio_length - audio_start
                     st.text('Audio Details:')
