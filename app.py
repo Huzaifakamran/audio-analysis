@@ -70,7 +70,7 @@ def extract_nouns_with_counts(TranscriptText):
     black_list = ['cosa','hecho','gracia','gracias','solo','adiós','vale','respecto','poder','cuenta']
     def extract_nouns(text):
         doc = nlp(text)
-        nouns = [token.lemma_ for token in doc if token.pos_ == 'NOUN' and token.text not in black_list and token.lemma_ not in [verb.lemma_ for verb in doc if verb.pos_ == 'VERB'] and token.lemma_ not in spanish_verbs]
+        nouns = [token.lemma_ for token in doc if token.pos_ == 'NOUN' and token.text not in black_list and token.lemma_.lower() not in [verb.lemma_.lower() for verb in doc if verb.pos_ == 'VERB'] and token.lemma_.lower() not in spanish_verbs]
         return nouns
 
     def count_occurrences(nouns):
