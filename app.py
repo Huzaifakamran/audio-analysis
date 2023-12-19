@@ -107,10 +107,20 @@ def detect_silence(ffmpeg_path,path, time):
     # ffmpeg_path = '/usr/bin/ffmpeg'  # Replace this with the actual path on your system
 
     # Use os.path.join to create the full command
-    command = f'{ffmpeg_path} -i {path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
-    st.write(command)
-    out = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout, stderr = out.communicate()
+    # command = f'{ffmpeg_path} -i {path} -af silencedetect=n=-17dB:d={str(time)} -f null -'
+    command = [
+        '/usr/bin/ffmpeg',
+        '-i', path,
+        '-af', f'silencedetect=n=-17dB:d={str(time)}',
+        '-f', 'null', '-'
+    ]
+    # st.write(command)
+    try:
+        out = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        stdout, stderr = out.communicate()
+    except Exception as e:
+        st.error(f"Error executing command: {e}")
+
     s = stdout.decode("utf-8")
     k = s.split('[silencedetect @')
     
