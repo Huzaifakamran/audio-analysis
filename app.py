@@ -78,9 +78,6 @@ def extract_nouns_with_counts(TranscriptText):
                     nouns.append(token.lemma_)
         return nouns
         
-        
-        return nouns
-
     def count_occurrences(nouns):
         noun_counts = Counter(nouns)
         return noun_counts
