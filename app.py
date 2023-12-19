@@ -202,11 +202,11 @@ def main():
                     st.write(TranscriptText)
                 
                 with duration:
-                    # st.write("PATH:", os.environ["PATH"])
+                    st.write("PATH:", os.environ["PATH"])
                     
                     ffmpeg_path = shutil.which("ffmpeg")
                     # st.write("ffmpeg path:", ffmpeg_path)
-                    # st.write("Current Working Directory:", os.getcwd())
+                    st.write("Current Working Directory:", os.getcwd())
                     silence_list = detect_silence(ffmpeg_path,output_path, time = 4)
                     start,end = silence_list[0]
                     start1,end1 = silence_list[-1]
