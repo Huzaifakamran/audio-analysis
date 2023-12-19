@@ -74,10 +74,8 @@ def extract_nouns_with_counts(TranscriptText):
         # nouns = [token.text for token in doc if token.pos_ == 'NOUN' and token.text not in black_list and token.lemma_.lower() not in [verb.lemma_.lower() for verb in doc if verb.pos_ == 'VERB'] and token.lemma_.lower() not in spanish_verbs]
         for token in doc:
             if token.pos_ == 'NOUN' and token.text.lower() not in black_list:
-                result = token.text.lower()
-                if result.lemma_.lower() not in spanish_verbs:
-                    nouns.append(result.lemma_)
-
+                if token.lemma_.lower() not in spanish_verbs:
+                    nouns.append(token.lemma_)
         return nouns
         
         
