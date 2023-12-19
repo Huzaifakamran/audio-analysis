@@ -101,7 +101,7 @@ def delete_all_files_in_directory(directory_path):
     except Exception as e:
         st.write(f"An error occurred: {e}")
 
-def detect_silence(ffmpeg_path,path, time):
+def detect_silence(path, time):
     print('inside')
     # Full path to the ffmpeg executable
     # ffmpeg_path = '/usr/bin/ffmpeg'  # Replace this with the actual path on your system
@@ -212,12 +212,12 @@ def main():
                     st.write(TranscriptText)
                 
                 with duration:
-                    st.write("PATH:", os.environ["PATH"])
+                    # st.write("PATH:", os.environ["PATH"])
                     
-                    ffmpeg_path = shutil.which("ffmpeg")
+                    # ffmpeg_path = shutil.which("ffmpeg")
                     # st.write("ffmpeg path:", ffmpeg_path)
-                    st.write("Current Working Directory:", os.getcwd())
-                    silence_list = detect_silence(ffmpeg_path,output_path, time = 4)
+                    # st.write("Current Working Directory:", os.getcwd())
+                    silence_list = detect_silence(output_path, time = 4)
                     start,end = silence_list[0]
                     start1,end1 = silence_list[-1]
                     audio_start = math.floor(end)
