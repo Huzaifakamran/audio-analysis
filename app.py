@@ -175,7 +175,7 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
                 part.export(part_path, format="wav")
                 parts.append(part_path)
   
-    audio_duration = round(len(audio) / 60000, 1)
+    audio_duration = len(audio) / 1000
     with st.spinner(f'extracting text from {len(parts)} audio files'):
         text = ""
         for i in parts:
@@ -221,14 +221,15 @@ def main():
                     start,end = silence_list[0]
                     start1,end1 = silence_list[-1]
                     audio_start = math.ceil(end)
-                    audio_end = round(end1 / 60, 1)
-
-                    audio_duration = audio_length - round(audio_start / 60, 1)
-
-                    st.write('Audio Details:')
-                    st.write(f"Start: {audio_start}sec")
-                    st.write(f"End: {audio_end}min(s)")
-                    st.write(f"Audio Duration: {audio_duration}min(s)")
+                    # audio_end = round(end1 / 60, 1)
+                    st.write(audio_length)
+                    end_minutes, end_seconds = divmod(end1, 60)
+                    audio_duration = audio_length - audio_start
+                    st.text('Audio Details:')
+                    duration_minutes, duration_seconds = divmod(audio_duration, 60)
+                    st.text(f"Start: {audio_start}sec")
+                    st.text(f"End: {int(end_minutes)} min {int(end_seconds)} sec")
+                    st.text(f"Audio Duration: {int(duration_minutes)} min {int(duration_seconds)} sec")
                 
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
