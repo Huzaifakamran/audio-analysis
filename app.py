@@ -111,7 +111,7 @@ def detect_silence(path, time):
     command = [
         '/usr/bin/ffmpeg',
         '-i', path,
-        '-af', f'silencedetect=n=-17dB:d={str(time)}',
+        '-af', f'silencedetect=n=-10dB:d={str(time)}',
         '-f', 'null', '-'
     ]
     # st.write(command)
@@ -220,7 +220,7 @@ def main():
                     silence_list = detect_silence(output_path, time = 4)
                     start,end = silence_list[0]
                     start1,end1 = silence_list[-1]
-                    audio_start = math.floor(end)
+                    audio_start = math.ceil(end)
                     audio_end = round(end1 / 60, 1)
 
                     audio_duration = audio_length - round(audio_start / 60, 1)
