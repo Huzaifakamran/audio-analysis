@@ -84,9 +84,7 @@ def extract_nouns_with_counts(TranscriptText):
     
     spanish_text = TranscriptText.lower()
     nouns = extract_nouns(spanish_text)
-    st.write('Nouns:- ',nouns)
     noun_occurrences = count_occurrences(nouns)
-    st.write('Occurences:- ',noun_occurrences)
     return noun_occurrences
     
 def delete_all_files_in_directory(directory_path):
