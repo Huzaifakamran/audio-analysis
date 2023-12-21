@@ -232,15 +232,15 @@ def main():
                 
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
+                        brand_list = ["opel astra","astra","hyundai","peugeot","audi","mercedes benz","bmw"]
+                        skip_names = ['claudia','juan','pedro','ana','víctor','julia','julian','josé','cristina','camila','alba','anastasia','pedro','pablo','antonio','rafael','salvador','javier','enrique','marina','marta','mónica','maribel','natalia','noreia','nora','elsa','marcelo','felipe','celestina','germán','concepción','jesús','hugo','gael','iago','simón','elena','verónica','diego','daniel','yolanda','agustín']
                         noun_occurrences = extract_nouns_with_counts(TranscriptText)
                         paragraph_words = TranscriptText.lower().split()
-
+                        st.write('paragraph words: ',paragraph_words)
                         for noun, count in noun_occurrences.items():
-                            if noun.lower() in ["opel astra","astra","hyundai","peugeot","audi","mercedes benz","bmw"]:
-                                occurrences = sum(1 for word in paragraph_words if word == noun.lower())
-                                st.write(f"Noun: {noun}, Occurrences: {occurrences}")
-                            
-                            elif noun.lower() in ['claudia','juan','pedro','ana','víctor','julia','julian','josé','cristina','camila','alba','anastasia','pedro','pablo','antonio','rafael','salvador','javier','enrique','marina','marta','mónica','maribel','natalia','noreia','nora','elsa','marcelo','felipe','celestina','germán','concepción','jesús','hugo','gael','iago','simón','elena','verónica','diego','daniel','yolanda',	'agustín']:
+                            if noun.lower() in brand_list:
+                                st.write(f"Noun: {noun}, Occurrences: {paragraph_words.count(noun.lower())}")
+                            elif noun.lower() in skip_names:
                                 continue
                             else:
                                 st.write(f"Noun: {noun}, Occurrences: {count}")
