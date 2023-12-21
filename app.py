@@ -235,7 +235,7 @@ def main():
                         noun_occurrences = extract_nouns_with_counts(TranscriptText)
                         for noun, count in noun_occurrences.items():
                             if noun.lower() in ["opel astra","astra","hyundai","peugeot","audi","mercedes benz","bmw"]:
-                                st.write(f"Noun: {noun}, Occurrences: {TranscriptText.lower().count(noun)}")
+                                st.write(f"Noun: {noun}, Occurrences: {TranscriptText.lower().count(noun.lower())}")
                             else:
                                 st.write(f"Noun: {noun}, Occurrences: {count}")
 
