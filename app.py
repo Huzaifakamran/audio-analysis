@@ -7,7 +7,6 @@ import os
 import subprocess
 import math
 import ffmpeg
-import shutil
 import spacy
 from collections import Counter
 
@@ -235,7 +234,10 @@ def main():
                     with nouns:
                         noun_occurrences = extract_nouns_with_counts(TranscriptText)
                         for noun, count in noun_occurrences.items():
-                            st.write(f"Noun: {noun}, Occurrences: {count}")
+                            if noun.lower() in ["opel astra","astra","hyundai","peugeot","audi","mercedes benz","bmw"]:
+                                st.write(f"Noun: {noun}, Occurrences: {TranscriptText.lower().count(noun)}")
+                            else:
+                                st.write(f"Noun: {noun}, Occurrences: {count}")
 
                 with st.spinner('analysing the conversation to fetch the required details'):    
                     with details:
