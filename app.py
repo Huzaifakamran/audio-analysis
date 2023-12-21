@@ -8,6 +8,7 @@ import subprocess
 import math
 import ffmpeg
 import spacy
+import string
 from collections import Counter
 
 load_dotenv()
@@ -232,11 +233,15 @@ def main():
                 
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
-                        brand_list = ["opel astra","astra","hyundai","peugeot","audi","mercedes benz","bmw"]
+                        brand_list = ["astra","hyundai","peugeot","audi","mercedes benz","bmw"]
                         skip_names = ['claudia','juan','pedro','ana','víctor','julia','julian','josé','cristina','camila','alba','anastasia','pedro','pablo','antonio','rafael','salvador','javier','enrique','marina','marta','mónica','maribel','natalia','noreia','nora','elsa','marcelo','felipe','celestina','germán','concepción','jesús','hugo','gael','iago','simón','elena','verónica','diego','daniel','yolanda','agustín']
                         noun_occurrences = extract_nouns_with_counts(TranscriptText)
-                        paragraph_words = TranscriptText.lower().split()
-                        st.write('paragraph words: ',paragraph_words)
+                        chars_to_remove = [',', '.', '...']
+                        translator = str.maketrans('', '', ''.join(chars_to_remove))
+
+                        cleaned_paragraph = TranscriptText.lower().translate(translator)
+                        paragraph_words = cleaned_paragraph.split()  
+                        
                         for noun, count in noun_occurrences.items():
                             if noun.lower() in brand_list:
                                 st.write(f"Noun: {noun}, Occurrences: {paragraph_words.count(noun.lower())}")
