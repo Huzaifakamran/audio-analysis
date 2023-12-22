@@ -219,7 +219,7 @@ def main():
                     # st.write("ffmpeg path:", ffmpeg_path)
                     # st.write("Current Working Directory:", os.getcwd())
                     silence_list = detect_silence(output_path, time = 4)
-                    st.write(silence_list)
+                    # st.write(silence_list)
                     if silence_list is not None:
                         start,end = silence_list[0]
                         start1,end1 = silence_list[-1]
