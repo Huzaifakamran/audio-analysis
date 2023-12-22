@@ -184,7 +184,7 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt = "Al convertir un audio en texto, asegúrese de escribir correctamente los nombres de las marcas. Estos son algunos nombres de marcas:[Opel Astra,Hyundai,Peugeot,Audi,Mercedes Benz,BMW]",
+            prompt = "Al convertir un audio en texto, asegúrese de escribir correctamente los nombres de las marcas. Estos son algunos nombres de marcas:[Opel Astra,Hyundai,Peugeot,Audi,Mercedes Benz,BMW,Vydura]",
             file=audio_file
             )
             text += transcript.text + " "
@@ -234,7 +234,7 @@ def main():
                 
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
-                        brand_list = ["astra","hyundai","peugeot","audi","mercedes benz","bmw"]
+                        brand_list = ["astra","hyundai","peugeot","audi","mercedes benz","bmw","vydura"]
                         skip_names = ['claudia','juan','pedro','ana','víctor','julia','julian','josé','cristina','camila','alba','anastasia','pedro','pablo','antonio','rafael','salvador','javier','enrique','marina','marta','mónica','maribel','natalia','noreia','nora','elsa','marcelo','felipe','celestina','germán','concepción','jesús','hugo','gael','iago','simón','elena','verónica','diego','daniel','yolanda','agustín']
                         noun_occurrences = extract_nouns_with_counts(TranscriptText)
                         chars_to_remove = [',', '.', '...']
