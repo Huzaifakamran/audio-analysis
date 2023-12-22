@@ -253,6 +253,8 @@ def main():
                                 st.write(f"Noun: {noun}, Occurrences: {paragraph_words.count(noun.lower())}")
                             elif noun.lower() in skip_names:
                                 continue
+                            elif noun.lower() in ['bidura','bydura','vydura','vidura']:
+                                st.write(f"Noun: vydura, Occurrences: {paragraph_words.count(noun.lower())}")
                             else:
                                 st.write(f"Noun: {noun}, Occurrences: {count}")
 
