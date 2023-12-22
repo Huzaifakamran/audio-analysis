@@ -219,19 +219,21 @@ def main():
                     # st.write("ffmpeg path:", ffmpeg_path)
                     # st.write("Current Working Directory:", os.getcwd())
                     silence_list = detect_silence(output_path, time = 4)
-                    start,end = silence_list[0]
-                    start1,end1 = silence_list[-1]
-                    audio_start = math.ceil(end)
-                    # audio_end = round(end1 / 60, 1)
-                    # st.write(audio_length)
-                    end_minutes, end_seconds = divmod(end1, 60)
-                    audio_duration = audio_length - audio_start
-                    st.text('Audio Details:')
-                    duration_minutes, duration_seconds = divmod(audio_duration, 60)
-                    st.text(f"Start: {audio_start}sec")
-                    st.text(f"End: {int(end_minutes)} min {int(end_seconds)} sec")
-                    st.text(f"Audio Duration: {int(duration_minutes)} min {int(duration_seconds)} sec")
-                
+                    if silence_list:
+                        start,end = silence_list[0]
+                        start1,end1 = silence_list[-1]
+                        audio_start = math.ceil(end)
+                        # audio_end = round(end1 / 60, 1)
+                        # st.write(audio_length)
+                        end_minutes, end_seconds = divmod(end1, 60)
+                        audio_duration = audio_length - audio_start
+                        st.text('Audio Details:')
+                        duration_minutes, duration_seconds = divmod(audio_duration, 60)
+                        st.text(f"Start: {audio_start}sec")
+                        st.text(f"End: {int(end_minutes)} min {int(end_seconds)} sec")
+                        st.text(f"Audio Duration: {int(duration_minutes)} min {int(duration_seconds)} sec")
+                    else:
+                        st.text('No Silence Found')
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
                         brand_list = ["astra","hyundai","peugeot","audi","mercedes benz","bmw","vydura"]
