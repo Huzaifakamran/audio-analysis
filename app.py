@@ -148,7 +148,14 @@ def main():
         st.title("Audio to Text Conversion App")
         if "audio_file" not in st.session_state:
             st.session_state.audio_file = None
+        uploaded_file = st.sidebar.file_uploader("Upload Excel File", type=["xlsx"])
 
+        # Check if a file is uploaded
+        if uploaded_file is not None:
+            with open("dictionary.xlsx", "wb") as f:
+                f.write(uploaded_file.getbuffer())
+                
+        excel_file_path = 'dictionary.xlsx'
         uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav"])
         if uploaded_file is not None:
             st.session_state.audio_file = uploaded_file
@@ -156,9 +163,6 @@ def main():
 
             if st.button("Convert to Text"):
                 TranscriptText,audio_length,output_path = convert_audio_to_text(st.session_state.audio_file,'audios')
-                # converted_files  = convert_audio_to_text(st.session_state.audio_file,'audios')
-                # print("Converted and/or split files:", converted_files)
-                # Add tabs
                 text,duration,nouns,details = st.tabs(["Audio To Text","Duration","Nouns","Detail"])
         
                 with text:
@@ -189,7 +193,7 @@ def main():
                         st.text('No Silence Found')
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
-                        excel_file_path = 'dictionary.xlsx'
+                        # excel_file_path = 'dictionary.xlsx'
                         df = pd.read_excel(excel_file_path)
                         column_lists = [df[column].dropna().tolist() for column in df.columns]
                         glocary = column_lists[0]
