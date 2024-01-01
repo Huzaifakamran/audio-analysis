@@ -148,12 +148,15 @@ def main():
         st.title("Audio to Text Conversion App")
         if "audio_file" not in st.session_state:
             st.session_state.audio_file = None
-        uploaded_file = st.sidebar.file_uploader("Upload Excel File", type=["xlsx"])
-
-        # Check if a file is uploaded
-        if uploaded_file is not None:
+        uploaded_file1 = st.sidebar.file_uploader("Upload dictionary.xlsx file", type=["xlsx"])
+        if uploaded_file1 is not None:
             with open("dictionary.xlsx", "wb") as f:
-                f.write(uploaded_file.getbuffer())
+                f.write(uploaded_file1.getbuffer())
+
+        uploaded_file2 = st.sidebar.file_uploader("Upload glosary.xlsx file", type=["xlsx"])
+        if uploaded_file2 is not None:
+            with open("glosary.xlsx", "wb") as f:
+                f.write(uploaded_file2.getbuffer())
                 
         excel_file_path = 'dictionary.xlsx'
         uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav"])
@@ -196,12 +199,15 @@ def main():
                         # excel_file_path = 'dictionary.xlsx'
                         df = pd.read_excel(excel_file_path)
                         column_lists = [df[column].dropna().tolist() for column in df.columns]
-                        glocary = column_lists[0]
-                        black_list = column_lists[1]
-                        brand_list = column_lists[2]
-                        skip_nouns = column_lists[3]
-                        similarity_brands = column_lists[4]
+                        black_list = column_lists[0]
+                        brand_list = column_lists[1]
+                        skip_nouns = column_lists[2]
+                        similarity_brands = column_lists[3]
 
+                        glosary_file_path = 'glosary.xlsx'
+                        df1 = pd.read_excel(glosary_file_path)
+                        glocary = [word for col in df1.columns for word in df1[col].dropna()]
+                        
                         noun_occurrences = extract_nouns_with_counts(glocary,black_list,TranscriptText)
                         chars_to_remove = [',', '.', '...']
                         translator = str.maketrans('', '', ''.join(chars_to_remove))
