@@ -21,7 +21,7 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def extract_nouns_with_counts(glocary,black_list,TranscriptText):
     nlp = spacy.load('es_core_news_sm')
-    def extract_nouns(text):
+    def extract_nouns(text,original_text):
         doc = nlp(text)
         nouns = []
         # nouns = [token.text for token in doc if token.pos_ == 'NOUN' and token.text not in black_list and token.lemma_.lower() not in [verb.lemma_.lower() for verb in doc if verb.pos_ == 'VERB'] and token.lemma_.lower() not in spanish_verbs]
@@ -29,14 +29,21 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText):
             if token.pos_ == 'NOUN' and token.text.lower() not in black_list:
                 if token.lemma_.lower() not in glocary and token.text.lower() not in glocary:
                     nouns.append(token.lemma_)
+        
+        for line in original_text:
+            for word in line.split():
+                if word.isupper() and len(word) > 1:
+                    word = word.replace(".", "")
+                    nouns.append(word)
         return nouns
         
     def count_occurrences(nouns):
         noun_counts = Counter(nouns)
         return noun_counts
     
+    original_text = TranscriptText
     spanish_text = TranscriptText.lower()
-    nouns = extract_nouns(spanish_text)
+    nouns = extract_nouns(spanish_text,original_text)
     noun_occurrences = count_occurrences(nouns)
     return noun_occurrences
     
