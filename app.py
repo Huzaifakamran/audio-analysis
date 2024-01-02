@@ -203,6 +203,7 @@ def main():
                         brand_list = column_lists[1]
                         skip_nouns = column_lists[2]
                         similarity_brands = column_lists[3]
+                        replacement_words = column_lists[4]
 
                         glosary_file_path = 'glosary.xlsx'
                         df1 = pd.read_excel(glosary_file_path)
@@ -221,7 +222,11 @@ def main():
                             elif noun.lower() in skip_nouns:
                                 continue
                             elif noun.lower() in similarity_brands:
-                                st.write(f"Noun: vydura, Occurrences: {paragraph_words.count(noun.lower())}")
+                                
+                                replacement_word_index = similarity_brands.index(noun.lower())
+                                replacement_word = replacement_words[replacement_word_index]
+
+                                st.write(f"Noun: {replacement_word}, Occurrences: {paragraph_words.count(noun.lower())}")
                             else:
                                 st.write(f"Noun: {noun}, Occurrences: {count}")
 
