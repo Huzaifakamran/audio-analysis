@@ -206,7 +206,7 @@ def main():
                         replacement_words = column_lists[4]
 
                         glosary_file_path = 'glosary.xlsx'
-                        df1 = pd.read_excel(glosary_file_path)
+                        df1 = pd.read_excel(glosary_file_path,header=None)
                         glocary = [word for col in df1.columns for word in df1[col].dropna()]
                         
                         noun_occurrences = extract_nouns_with_counts(glocary,black_list,TranscriptText)
@@ -222,7 +222,7 @@ def main():
                             elif noun.lower() in skip_nouns:
                                 continue
                             elif noun.lower() in similarity_brands:
-                                
+
                                 replacement_word_index = similarity_brands.index(noun.lower())
                                 replacement_word = replacement_words[replacement_word_index]
 
