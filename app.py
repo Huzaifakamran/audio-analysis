@@ -110,7 +110,7 @@ def detect_silence(path, time):
     # print(list(zip(start, end)))
     return list(zip(start, end))
 
-def convert_audio_to_text(input_path,similarity_brands,replacement_words,output_dir,max_size_mb=25):
+def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_words,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
         # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
         # utils.get_prober_name = get_prober_name
@@ -287,7 +287,7 @@ def main():
 
                         for similar, replace in zip(similarity_brands, replacement_words):
                             result = result.replace(similar, replace)
-                            
+
                         st.write(result)
 
                 delete_all_files_in_directory('audios')
