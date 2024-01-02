@@ -30,11 +30,11 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText):
                 if token.lemma_.lower() not in glocary and token.text.lower() not in glocary:
                     nouns.append(token.lemma_)
         
-        for line in original_text:
-            for word in line.split():
-                if word.isupper() and len(word) > 1:
-                    word = word.replace(".", "")
-                    nouns.append(word)
+        for word in original_text.split():
+            if word.isupper() and len(word) > 1:
+                word = word.replace(".", "")
+                nouns.append(word)
+                
         return nouns
         
     def count_occurrences(nouns):
