@@ -34,7 +34,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText):
             if word.isupper() and len(word) > 1:
                 word = word.replace(".", "")
                 nouns.append(word)
-                
+
         return nouns
         
     def count_occurrences(nouns):
@@ -110,7 +110,7 @@ def detect_silence(path, time):
     # print(list(zip(start, end)))
     return list(zip(start, end))
 
-def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
+def convert_audio_to_text(input_path,similarity_brands,replacement_words,output_dir,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
         # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
         # utils.get_prober_name = get_prober_name
@@ -148,6 +148,9 @@ def convert_audio_to_text(input_path,output_dir,max_size_mb=25):
             )
             text += transcript.text + " "
 
+        for similar, replace in zip(similarity_brands, replacement_words):
+            text = text.replace(similar, replace)
+
         return text,audio_duration,output_path
 
 def main():
@@ -166,13 +169,22 @@ def main():
                 f.write(uploaded_file2.getbuffer())
                 
         excel_file_path = 'dictionary.xlsx'
+
+        df = pd.read_excel(excel_file_path)
+        column_lists = [df[column].dropna().tolist() for column in df.columns]
+        black_list = column_lists[0]
+        brand_list = column_lists[1]
+        skip_nouns = column_lists[2]
+        similarity_brands = column_lists[3]
+        replacement_words = column_lists[4]
+        
         uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "wav"])
         if uploaded_file is not None:
             st.session_state.audio_file = uploaded_file
             st.audio(st.session_state.audio_file, format="audio/wav", start_time=0)
 
             if st.button("Convert to Text"):
-                TranscriptText,audio_length,output_path = convert_audio_to_text(st.session_state.audio_file,'audios')
+                TranscriptText,audio_length,output_path = convert_audio_to_text(st.session_state.audio_file,'audios',similarity_brands,replacement_words)
                 text,duration,nouns,details = st.tabs(["Audio To Text","Duration","Nouns","Detail"])
         
                 with text:
@@ -203,14 +215,14 @@ def main():
                         st.text('No Silence Found')
                 with st.spinner('Extracting Nouns'):    
                     with nouns:
-                        # excel_file_path = 'dictionary.xlsx'
-                        df = pd.read_excel(excel_file_path)
-                        column_lists = [df[column].dropna().tolist() for column in df.columns]
-                        black_list = column_lists[0]
-                        brand_list = column_lists[1]
-                        skip_nouns = column_lists[2]
-                        similarity_brands = column_lists[3]
-                        replacement_words = column_lists[4]
+                        ## excel_file_path = 'dictionary.xlsx'
+                        # df = pd.read_excel(excel_file_path)
+                        # column_lists = [df[column].dropna().tolist() for column in df.columns]
+                        # black_list = column_lists[0]
+                        # brand_list = column_lists[1]
+                        # skip_nouns = column_lists[2]
+                        # similarity_brands = column_lists[3]
+                        # replacement_words = column_lists[4]
 
                         glosary_file_path = 'glosary.xlsx'
                         df1 = pd.read_excel(glosary_file_path,header=None)
@@ -272,6 +284,10 @@ def main():
                         {"role": "user", "content":TranscriptText}]
                         )
                         result = assistant.choices[0].message.content
+
+                        for similar, replace in zip(similarity_brands, replacement_words):
+                            result = result.replace(similar, replace)
+                            
                         st.write(result)
 
                 delete_all_files_in_directory('audios')
