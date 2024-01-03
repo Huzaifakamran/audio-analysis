@@ -149,7 +149,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             text += transcript.text + " "
 
         for similar, replace in zip(similarity_brands, replacement_words):
-            text = text.replace(similar, replace)
+            text = text.lower().replace(similar, replace)
 
         return text,audio_duration,output_path
 
@@ -286,7 +286,7 @@ def main():
                         result = assistant.choices[0].message.content
 
                         for similar, replace in zip(similarity_brands, replacement_words):
-                            result = result.replace(similar, replace)
+                            result = result.lower().replace(similar, replace)
 
                         st.write(result)
 
