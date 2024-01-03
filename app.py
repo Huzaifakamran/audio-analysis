@@ -133,7 +133,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
                 part.export(part_path, format="wav")
                 parts.append(part_path)
   
-    audio_duration = len(audio) / 1000
+    # audio_duration = len(audio) / 1000
     with st.spinner(f'extracting text from {len(parts)} audio files'):
         text = ""
         for i in parts:
@@ -150,7 +150,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             pattern = re.compile(re.escape(similar), re.IGNORECASE)
             text = pattern.sub(replace, text)
 
-        return text,audio_duration,output_path
+        return text,output_path
 
 def main():
     try:
@@ -183,7 +183,7 @@ def main():
             st.audio(st.session_state.audio_file, format="audio/wav", start_time=0)
 
             if st.button("Convert to Text"):
-                TranscriptText,audio_length,output_path = convert_audio_to_text(st.session_state.audio_file,'audios',similarity_brands,replacement_words)
+                TranscriptText,output_path = convert_audio_to_text(st.session_state.audio_file,'audios',similarity_brands,replacement_words)
                 text,duration,nouns,details = st.tabs(["Audio To Text","Duration","Nouns","Detail"])
         
                 with text:
@@ -191,7 +191,6 @@ def main():
                 
                 with duration:
                     # st.write("PATH:", os.environ["PATH"])
-                    
                     # ffmpeg_path = shutil.which("ffmpeg")
                     # st.write("ffmpeg path:", ffmpeg_path)
                     # st.write("Current Working Directory:", os.getcwd())
@@ -268,7 +267,8 @@ def main():
                         
                         The third detail is "Distribution",you need to include a percentage distribution of the 
                         6 preferences of client profile for purchaising(Trend,Money,Confort, Fidelity,Security and Pride). 
-                        And 'Pride' and 'Status' is same thing so use one of them.
+                        And 'Pride' and 'Status' is same thing so use one of them. Make sure to mention all preferences and if
+                        there is any preference that is not mentioned just mention 0 against that preference but mention all.
                              
                         And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
                         and establish a probability of purchasing from 0 to 1.
