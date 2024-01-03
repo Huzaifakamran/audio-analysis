@@ -1,14 +1,12 @@
 import streamlit as st
-import speech_recognition as sr
-from pydub import utils,AudioSegment
+from pydub import AudioSegment
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import subprocess
 import math
-import ffmpeg
 import spacy
-import string
+import re
 from collections import Counter
 import pandas as pd
 load_dotenv()
@@ -149,7 +147,8 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             text += transcript.text + " "
 
         for similar, replace in zip(similarity_brands, replacement_words):
-            text = text.replace(similar, replace)
+            pattern = re.compile(re.escape(similar), re.IGNORECASE)
+            text = pattern.sub(replace, text)
 
         return text,audio_duration,output_path
 
@@ -286,7 +285,8 @@ def main():
                         result = assistant.choices[0].message.content
 
                         for similar, replace in zip(similarity_brands, replacement_words):
-                            result = result.replace(similar, replace)
+                            pattern = re.compile(re.escape(similar), re.IGNORECASE)
+                            result = pattern.sub(replace, result)
 
                         st.write(result)
 
