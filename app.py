@@ -36,7 +36,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
         for i in brand_list:
             if i not in nouns or i.upper() not in nouns or i.title() not in nouns:
                 nouns.append(i)
-                
+
         return nouns
         
     def count_occurrences(nouns):
@@ -257,7 +257,7 @@ def main():
                         model="gpt-4-1106-preview",
                         temperature=0,
                         messages=[
-                            {"role": "system", "content":'''You need to give 4 details by checking the below text extracted 
+                            {"role": "system", "content":'''I want to spend 200k€ in this approach.You need to give 4 details by checking the below text extracted 
 from an audio in spanish and in the audio there will be 2 people one is client
 and the other one is salesman. 
       
@@ -275,7 +275,7 @@ And 'Pride' and 'Status' is same thing so use one of them. Make sure to mention 
 there is any preference that is not mentioned just mention 0 against that preference name but mention all of the preference just for once.
       
 And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
-and establish a probability of purchasing from 0 to 1 and just give one number let suppose if it is 0.9 just mention 0.9 not 90% and give description.
+and establish a probability of purchasing from 0 to 1 and just give one number let suppose if it is 0.9 just mention 0.9 not 90% and give description and while giving description not use a word "could be" you must be sure.
 
 In the output each detail should be in the new line like this:
 Concept:
