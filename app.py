@@ -108,7 +108,7 @@ def detect_silence(path, time):
     # print(list(zip(start, end)))
     return list(zip(start, end))
 
-def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_words,max_size_mb=25):
+def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_words,brand_list,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
         # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
         # utils.get_prober_name = get_prober_name
@@ -141,7 +141,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt = "Al convertir un audio en texto, asegúrese de escribir correctamente los nombres de las marcas. Estos son algunos nombres de marcas:[Opel Astra,Hyundai,Peugeot,Audi,Mercedes Benz,BMW,Vydura]",
+            prompt = f"Al convertir un audio en texto, asegúrese de escribir correctamente los nombres de las marcas. Estos son algunos nombres de marcas:{brand_list}",
             file=audio_file
             )
             text += transcript.text + " "
@@ -183,7 +183,7 @@ def main():
             st.audio(st.session_state.audio_file, format="audio/wav", start_time=0)
 
             if st.button("Convert to Text"):
-                TranscriptText,output_path = convert_audio_to_text(st.session_state.audio_file,'audios',similarity_brands,replacement_words)
+                TranscriptText,output_path = convert_audio_to_text(st.session_state.audio_file,'audios',similarity_brands,replacement_words,brand_list)
                 text,duration,nouns,details = st.tabs(["Audio To Text","Duration","Nouns","Detail"])
         
                 with text:
@@ -254,33 +254,33 @@ def main():
                         temperature=0,
                         messages=[
                             {"role": "system", "content":'''You need to give 4 details by checking the below text extracted 
-                        from an audio in spanish and in the audio there will be 2 people one is client
-                        and the other one is salesman. 
-                             
-                        The first detail is "Concept", you need to understand the concept spoken in the audio.
-                        For example customer talk about buying a car and talk about speed, 
-                        engine, seat, security, etc so you need to understand the converation and 
-                        which part is said by who (client & salesman). 
-                             
-                        The second detail is "Client Profile", you need to identify the client profile based on
-                        the following preferences of purchasing: (Trend,Money,Confort, Fidelity,Security and Pride). 
-                        
-                        The third detail is "Distribution",you need to include a percentage distribution of the 
-                        6 preferences of client profile for purchaising(Trend,Money,Confort, Fidelity,Security and Pride). 
-                        And 'Pride' and 'Status' is same thing so use one of them. Make sure to mention all preferences and if
-                        there is any preference that is not mentioned just mention 0 against that preference but mention all.
-                             
-                        And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
-                        and establish a probability of purchasing from 0 to 1.
+from an audio in spanish and in the audio there will be 2 people one is client
+and the other one is salesman. 
+      
+The first detail is "Concept", you need to understand the concept spoken in the audio.
+For example customer talk about buying a car and talk about speed, 
+engine, seat, security, etc so you need to understand the converation and 
+which part is said by who (client & salesman). 
+      
+The second detail is "Client Profile", you need to identify the client profile based on
+the following preferences of purchasing: (Trend,Money,Confort, Fidelity,Security and Pride). 
 
-                        In the output each detail should be in the new line like this:
-                        Concept:
-                        Client Profile:
-                        Distribution:
-                        Probablity:
-                        
-                        Note: Make sure answer will be in spanish'''},
-                        {"role": "user", "content":TranscriptText}]
+The third detail is "Distribution",you need to include a percentage distribution of the 
+6 preferences of client profile for purchaising(Trend,Money,Confort, Fidelity,Security and Pride). 
+And 'Pride' and 'Status' is same thing so use one of them. Make sure to mention all preferences and if
+there is any preference that is not mentioned just mention 0 against that preference name but mention all of the preference just for once.
+      
+And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
+and establish a probability of purchasing from 0 to 1 and just give one number let suppose if it is 0.9 just mention 0.9 not 90%.
+
+In the output each detail should be in the new line like this:
+Concept:
+Client Profile:
+Distribution:
+Probablity:
+
+Note: Make sure answer will be in spanish'''},
+                            {"role": "user", "content":TranscriptText}]
                         )
                         result = assistant.choices[0].message.content
 
