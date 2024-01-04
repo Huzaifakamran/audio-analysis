@@ -271,7 +271,7 @@ And 'Pride' and 'Status' is same thing so use one of them. Make sure to mention 
 there is any preference that is not mentioned just mention 0 against that preference name but mention all of the preference just for once.
       
 And the fourth detail is to called "Probablity", you need to analyze the conversation based on client profile 
-and establish a probability of purchasing from 0 to 1 and just give one number let suppose if it is 0.9 just mention 0.9 not 90%.
+and establish a probability of purchasing from 0 to 1 and just give one number let suppose if it is 0.9 just mention 0.9 not 90% and give description.
 
 In the output each detail should be in the new line like this:
 Concept:
