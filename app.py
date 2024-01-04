@@ -17,7 +17,7 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # def get_prober_name():
 #     return "ffmpeg/bin/ffprobe.exe"
 
-def extract_nouns_with_counts(glocary,black_list,TranscriptText):
+def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
     nlp = spacy.load('es_core_news_sm')
     def extract_nouns(text,original_text):
         doc = nlp(text)
@@ -33,6 +33,10 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText):
                 word = word.replace(".", "")
                 nouns.append(word)
 
+        for i in brand_list:
+            if i not in nouns or i.upper() not in nouns or i.title() not in nouns:
+                nouns.append(i)
+                
         return nouns
         
     def count_occurrences(nouns):
@@ -226,7 +230,7 @@ def main():
                         df1 = pd.read_excel(glosary_file_path,header=None)
                         glocary = [word for col in df1.columns for word in df1[col].dropna()]
                         
-                        noun_occurrences = extract_nouns_with_counts(glocary,black_list,TranscriptText)
+                        noun_occurrences = extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list)
                         chars_to_remove = [',', '.', '...']
                         translator = str.maketrans('', '', ''.join(chars_to_remove))
 
