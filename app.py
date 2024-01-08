@@ -34,7 +34,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
                 nouns.append(word)
 
         for i in brand_list:
-            if i not in nouns or i.upper() not in nouns or i.title() not in nouns:
+            if i.lower() in original_text.split() and (i.lower() not in nouns or i.upper() not in nouns or i.title() not in nouns):
                 nouns.append(i)
 
         return nouns
