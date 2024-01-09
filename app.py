@@ -34,10 +34,9 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
                 nouns.append(word)
 
         lowercase_list = [word.lower().replace(".","").replace(",","") for word in nouns]
+        st.write(lowercase_list)
         for i in brand_list:
-            st.write('Brand is: ',i)
             if i.lower() in text.split() and i.lower() not in lowercase_list:
-                st.write('adding brand')
                 nouns.append(i)
 
         return nouns
