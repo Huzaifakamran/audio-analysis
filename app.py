@@ -7,15 +7,16 @@ import subprocess
 import math
 import spacy
 import re
+import utils
 from collections import Counter
 import pandas as pd
 load_dotenv()
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# def get_prober_name():
-#     return "ffmpeg/bin/ffprobe.exe"
+def get_prober_name():
+    return "ffmpeg/bin/ffprobe.exe"
 
 def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
     nlp = spacy.load('es_core_news_sm')
@@ -28,10 +29,14 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
                 if token.lemma_.lower() not in glocary and token.text.lower() not in glocary:
                     nouns.append(token.lemma_)
         
+        noun_lower_list1 = [word.lower().replace(".","").replace(",","") for word in nouns]
+        
         for word in original_text.split():
             if word.isupper() and len(word) > 1:
                 word = word.replace(".", "")
-                nouns.append(word)
+                if word.lower() not in noun_lower_list1:
+                    nouns.append(word)
+
         newList = text.split()
         lowercase_list = [word.lower().replace(".","").replace(",","") for word in newList]
         noun_lower_list = [word.lower().replace(".","").replace(",","") for word in nouns]
@@ -39,7 +44,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
         for i in brand_list:
             if i.lower() in lowercase_list and i.lower() not in noun_lower_list:
                 nouns.append(i)
-
+        
         return nouns
         
     def count_occurrences(nouns):
@@ -117,8 +122,8 @@ def detect_silence(path, time):
 
 def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_words,brand_list,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
-        # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
-        # utils.get_prober_name = get_prober_name
+        AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
+        utils.get_prober_name = get_prober_name
         audio = AudioSegment.from_file(input_path)
         output_path = os.path.join(output_dir, os.path.splitext(os.path.basename(input_path.name))[0] + ".wav")
         audio.export(output_path, format="wav")
@@ -148,7 +153,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt = f"Al convertir un audio en texto, asegúrese de escribir correctamente los nombres de las marcas. Estos son algunos nombres de marcas:{brand_list}",
+            prompt = f"Al convertir un audio en texto, asegúrese de que la transcripcion es en español (de España) y de escribir correctamente los nombres de las marcas en español (de España). Estos son algunos nombres de marcas:{brand_list}",
             file=audio_file
             )
             text += transcript.text + " "
