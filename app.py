@@ -7,7 +7,6 @@ import subprocess
 import math
 import spacy
 import re
-import utils
 from collections import Counter
 import pandas as pd
 load_dotenv()
