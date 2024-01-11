@@ -28,7 +28,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
                 if token.lemma_.lower() not in glocary and token.text.lower() not in glocary:
                     token.lemma_ = token.lemma_.replace(".","").replace(",","")
                     nouns.append(token.lemma_)
-        st.write('Noun1',nouns)
+        
         
         noun_lower_list1 = [word.lower().replace(".","").replace(",","") for word in nouns]
         
@@ -37,7 +37,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
                 word = word.replace(".", "").replace(",","")
                 if word.lower() not in noun_lower_list1:
                     nouns.append(word)
-        st.write('Noun2',nouns)
+        
         newList = text.split()
         lowercase_list = [word.lower().replace(".","").replace(",","") for word in newList]
         noun_lower_list = [word.lower().replace(".","").replace(",","") for word in nouns]
@@ -45,7 +45,7 @@ def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
         for i in brand_list:
             if i.lower() in lowercase_list and i.lower() not in noun_lower_list:
                 nouns.append(i)
-        st.write('Noun3',nouns)
+        
         return nouns
         
     def count_occurrences(nouns):
