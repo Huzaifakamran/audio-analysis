@@ -12,11 +12,11 @@ from collections import Counter
 import pandas as pd
 load_dotenv()
 
-# client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def get_prober_name():
-    return "ffmpeg/bin/ffprobe.exe"
+# def get_prober_name():
+#     return "ffmpeg/bin/ffprobe.exe"
 
 def extract_nouns_with_counts(glocary,black_list,TranscriptText,brand_list):
     nlp = spacy.load('es_core_news_sm')
@@ -122,8 +122,8 @@ def detect_silence(path, time):
 
 def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_words,brand_list,max_size_mb=25):
     with st.spinner('converting audio to the standard format'):
-        AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
-        utils.get_prober_name = get_prober_name
+        # AudioSegment.converter = "ffmpeg/bin/ffmpeg.exe"                  
+        # utils.get_prober_name = get_prober_name
         audio = AudioSegment.from_file(input_path)
         output_path = os.path.join(output_dir, os.path.splitext(os.path.basename(input_path.name))[0] + ".wav")
         audio.export(output_path, format="wav")
