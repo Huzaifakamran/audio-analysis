@@ -154,7 +154,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt = f"Al convertir un audio en texto, asegúrese de escribir correctamente los nombres de las marcas. Estos son algunos nombres de marcas:{brand_list}",
+            prompt = f"{brand_list}",
             file=audio_file
             )
             text += transcript.text + " "
