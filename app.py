@@ -153,10 +153,10 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt = f"esta es la transcripción anterior: {text} y asegúrate de escribir estas palabras correctamente: {brand_list}",
+            prompt = f"esta es la transcripción anterior: {text} y estas son algunas de las palabras correctas: {brand_list}",
             file=audio_file,
             language='es',
-            temperature=0.3
+            temperature=0.4
             )
             text += transcript.text + " "
 
