@@ -156,7 +156,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             prompt = f"{brand_list}",
             file=audio_file,
             language='es',
-            temperature=0.4
+            temperature=0.5
             )
             text += transcript.text + " "
 
