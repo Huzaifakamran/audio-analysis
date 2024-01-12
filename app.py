@@ -159,6 +159,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             response_format = 'text',
             temperature=0.2
             )
+            st.write('test',transcript)
             text += transcript.text + " "
 
         for similar, replace in zip(similarity_brands, replacement_words):
