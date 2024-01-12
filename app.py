@@ -150,12 +150,14 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
     with st.spinner(f'extracting text from {len(parts)} audio files'):
         text = ""
         for i in parts:
-    
             audio_file = open(i, "rb")
             transcript = client.audio.transcriptions.create(
             model="whisper-1",
-            prompt = f"{brand_list}",
-            file=audio_file
+            prompt = f"esta es la transcripción anterior: {text} y asegúrate de escribir estas palabras correctamente: {brand_list}",
+            file=audio_file,
+            language='es',
+            response_format = 'text',
+            temperature=0.2
             )
             text += transcript.text + " "
 
