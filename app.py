@@ -156,7 +156,7 @@ def convert_audio_to_text(input_path,output_dir,similarity_brands,replacement_wo
             prompt = f"esta es la transcripción anterior: {text} y asegúrate de escribir estas palabras correctamente: {brand_list}",
             file=audio_file,
             language='es',
-            temperature=0.2
+            temperature=0.3
             )
             text += transcript.text + " "
 
